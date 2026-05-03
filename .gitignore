@@ -1,0 +1,9 @@
+node_modules/
+*.db
+*.db-wal
+*.db-shm
+test.db
+coverage/
+certs/*.pem
+.env
+.DS_Store

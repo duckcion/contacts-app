@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: contacts-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_PATH=/data/contacts.db
+    volumes:
+      # Persist SQLite database
+      - contacts-data:/data
+      # Mount TLS cert (place server.pem here before starting)
+      - ./certs:/app/certs:ro
+    networks:
+      - contacts-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  contacts-data:
+    driver: local
+
+networks:
+  contacts-net:
+    driver: bridge
