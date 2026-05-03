@@ -7,3 +7,5 @@ coverage/
 certs/*.pem
 .env
 .DS_Store
+
+trivy.exe
